@@ -16,13 +16,14 @@ class ViewController: UIViewController {
         myTableView.dataSource = self
         myTableView.delegate = self
         
-        fetchData(url: url!) {(data : [Rocket]) in
+        fetchData(url: url!) {[weak self] (data : [Rocket]) in
             DispatchQueue.main.async{
-                self.rockets = data
-                self.myTableView.reloadData()
+                self?.rockets = data
+                self?.myTableView.reloadData()
             }
             
         }
+       
         
     }
     
@@ -48,22 +49,22 @@ extension ViewController : UITableViewDelegate{
         let sb = UIStoryboard(name: "Main", bundle: nil)
         let detail = sb.instantiateViewController(withIdentifier: "DETAILSB") as! DetailViewController
         detail.images = rockets![indexPath.row].flickrImages
-        print("clicked")
+      
         self.navigationController?.pushViewController(detail, animated: true)
+        print("clicked")
     }
 }
 extension UIViewController {
     
     // keyword @escaping của closure giúp ta giữ closure ko bị giải phóng khi function kết thúc
-    func fetchData(url : URL, _ completion : @escaping ([Rocket]) -> Void) {
+    func fetchData<T : Decodable>(url : URL, _ completion : @escaping (T) -> Void) {
         
         let task = URLSession.shared.dataTask(with: url) {
             ( data, response, error) in
-            guard let data = data else { return }
-            let decoder = JSONDecoder()
             
+            guard let data = data else { return }
             do{
-                let objs = try! decoder.decode([Rocket].self, from: data)
+                let objs = try! JSONDecoder().decode(T.self, from: data)
                 
                 completion(objs)
             }

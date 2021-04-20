@@ -16,8 +16,8 @@ class DetailViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-
-
+    
+    
 }
 extension DetailViewController : UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -25,8 +25,9 @@ extension DetailViewController : UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "DETAILCELL") as! DetailTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "DETAICELL") as! DetailTableViewCell
         cell.updateUI(images![indexPath.row])
+        
         return cell
     }
     
